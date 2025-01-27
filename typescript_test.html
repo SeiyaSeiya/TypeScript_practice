@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeScript in Browser</title>
+  <script src="https://cdn.jsdelivr.net/npm/typescript@4.5.4/lib/typescript.js"></script>
+</head>
+<body>
+  <h1>TypeScript in Browser Example</h1>
+
+  <textarea id="tsCode" rows="20" cols="80">
+  let message: string = 'Hello, TypeScript in Browser!';
+  console.log(message);
+  </textarea>
+  <br>
+  <button id="run">Run TypeScript</button>
+  <pre id="output"></pre>
+
+  <script>
+    const output = document.getElementById("output");
+    
+    function runTS() {
+      const ts_code = document.getElementById("tsCode").value;
+
+      // TypeScriptコードをコンパイル
+      const js_code = ts.transpile(ts_code);
+      
+      // コンパイルされたJSコードを実行
+      try {
+        const output_result = eval(js_code);
+        output.textContent = "Executed: " + output_result;
+      } catch (err) {
+        output.textContent = "Error: " + err;
+      }
+    }
+
+    const run_button = document.getElementById('run');
+
+    run_button.addEventListener('click', runTS);
+  </script>
+</body>
+</html>
