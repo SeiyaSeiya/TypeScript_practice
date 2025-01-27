@@ -1,1 +1,4 @@
-# TypeScript_practice
+# TypeScript_on_browser
+ブラウザ上にてコンパイルを試みたものです。
+
+TypeScriptからJavaScriptへのトランスパイルには成功しているようですが、型エラーを補足することはできていません。
