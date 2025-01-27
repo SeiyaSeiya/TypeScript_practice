@@ -19,19 +19,38 @@
 
   <script>
     const output = document.getElementById("output");
+    const errors = document.getElementById('errors');
     
     function runTS() {
       const ts_code = document.getElementById("tsCode").value;
 
-      // TypeScriptコードをコンパイル
-      const js_code = ts.transpile(ts_code);
-      
-      // コンパイルされたJSコードを実行
-      try {
-        const output_result = eval(js_code);
-        output.textContent = "Executed: " + output_result;
-      } catch (err) {
-        output.textContent = "Error: " + err;
+      // TypeScriptコードを型チェックし、エラーを取得
+      const result = ts.transpileModule(ts_code, { 
+        compilerOptions: { 
+          noEmitOnError: true,   // エラーがあれば出力しない
+          noImplicitAny: true    // 'any'型の使用を禁止
+        }
+      });
+
+      if (result.diagnostics && result.diagnostics.length > 0) {
+        let errorMessages = "Type Errors:\n";
+        diagnostics.forEach(diagnostic => {
+          const message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+          errorMessages += message + "\n";
+        });
+        errors.textContent = errorMessages;
+        output.textContent = "";
+      } else {
+        // 型エラーがない場合、TypeScriptをコンパイルして実行
+        // const js_code = ts.transpile(ts_code);
+        const js_code = result.outputText;
+
+        try {
+          const output_result = eval(js_code);
+          output.textContent = "Code Executed Successfully!";
+        } catch (e) {
+          output.textContent = "Error: " + e;
+        }
       }
     }
 
